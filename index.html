@@ -148,6 +148,29 @@ footer p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(-
 }
 #tip .x:hover{background:#F1F3F5;color:var(--navy)}
 @media(prefers-reduced-motion:reduce){#tip{transition:none}}
+
+/* ---- lightbox ---- */
+.shot img,.record .sub{cursor:zoom-in}
+#lb{
+  position:fixed;inset:0;z-index:80;display:none;
+  align-items:center;justify-content:center;
+  background:rgba(14,20,31,.88);padding:24px;
+}
+#lb.show{display:flex}
+#lb img{
+  max-width:100%;max-height:100%;
+  border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.45);
+  cursor:default;
+}
+#lb .close{
+  position:absolute;top:14px;right:14px;
+  width:42px;height:42px;border-radius:50%;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+  color:#fff;font-size:20px;line-height:1;cursor:pointer;
+}
+#lb .close:hover{background:rgba(255,255,255,.26)}
+#lb .close:focus-visible{outline:2px solid #fff;outline-offset:2px}
+body.lb-open{overflow:hidden}
 </style>
 </head>
 <body>
@@ -186,6 +209,11 @@ footer p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(-
   <p>&copy; 2026 SIKUMI LAB</p>
 </footer>
 
+</div>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="画像の拡大表示">
+  <button class="close" type="button" aria-label="閉じる">&times;</button>
+  <img alt="">
 </div>
 
 <div id="tip" role="status" aria-live="polite">
@@ -470,15 +498,15 @@ const SECTIONS = [
       {
         name: "あとキュー（仮称）",
         state: "開発中", live: true,
-        tech: "PWA / localStorage",
+        tech: "PWA / React / localStorage / Web Push / Fastify / PostgreSQL / OCI",
         lede: "思いついたことを数秒で退避して、あとで行動に戻すためのツールです。",
         image: null,
         url: null,
         record: {
           q: "作業中に浮かんだ用事を、集中を切らさずに逃がす方法はないか気になった。",
-          m: "入力時に分類を求めない受信箱と、あとから整理を提案する画面を持つPWAとして設計した。",
-          w: "端末内で完結させるか、AI解析のための中継APIを用意するかが、まだ決まっていない。",
-          a: "構想をまとめ終えて、開発中。"
+          m: "入力時に分類を求めない受信箱、あとから整理する画面、放置の度合いに応じて声を掛ける「今日の確認」を持つPWAにした。本文は端末内のlocalStorageだけに置き、サーバーへは匿名の通知予約しか送らない。",
+          w: "PWAだけでは閉じている間の定期実行を保証できないため、Web Push用の最小のバックエンドを併設することになった。本文がAPIやログ、通知の中身に出ないことを、テストで確かめる作りにしている。",
+          a: "設計を終えて開発中。"
         }
       },
       {
@@ -504,7 +532,7 @@ const SECTIONS = [
       {
         name: "開発パイプラインのスキル",
         state: "説明のみ", live: false,
-        tech: "Claude Skills",
+        tech: "Claude Skills / Codex",
         lede: "思いつきから実装までを、四段階に分けて進めるための手順書です。",
         image: null,
         url: null,
@@ -512,7 +540,7 @@ const SECTIONS = [
           q: "AIに開発を任せるとき、どこまで手前を整えれば安定するのか気になった。",
           m: "構想のたたき台づくり、要件定義、基本設計、実装の分担という四段階に分け、それぞれを手順書にした。",
           w: "工程を分けるだけでは戻りが扱えず、前工程へのフィードバック経路と、次に進んでよいかの判定を足した。",
-          a: "自分の開発の下敷きとして使っている。中身は公開していない。"
+          a: "自分の開発の下敷きとして使っている。ClaudeだけでなくChatGPTのCodexでも動かしていて、両方で使いながら並行して直している。中身は公開していない。"
         }
       },
       {
@@ -650,6 +678,12 @@ const TERMS = {
   "localStorage":"ブラウザの中にデータを保存しておく仕組み。サーバーを使わずに記録を残せる。",
   "Gemini API":"Googleの生成AIを、外部のプログラムから使えるようにした窓口。",
   "Gemini":"Googleが提供する生成AIモデル。",
+  "Web Push":"サイトを閉じていても、ブラウザ経由で通知を届けるための仕組み。",
+  "Service Worker":"ページとは別に裏側で動く小さなプログラム。オフライン動作や通知を担う。",
+  "Fastify":"Node.jsでWebサーバーを作るための軽量な道具。",
+  "PostgreSQL":"広く使われているオープンソースのデータベース。",
+  "React":"画面の部品を組み合わせてUIを作るためのJavaScriptライブラリ。",
+  "Codex":"OpenAIが提供する、コードを書かせるためのAIエージェント。",
   "Web Audio API":"ブラウザ上で音を合成したり、細かいタイミングで再生したりするための仕組み。",
   "Vibration API":"ブラウザから端末を振動させるための仕組み。iOSのSafariでは使えない。",
   "Geolocation API":"ブラウザで端末の現在地を取得するための仕組み。",
@@ -774,6 +808,37 @@ const BLOCK = ["AI-OCR"];
   }
 })();
 
+
+
+/* -------------------------------------------------------------
+   画像の拡大表示
+   ------------------------------------------------------------- */
+(function(){
+  const lb    = document.getElementById('lb');
+  const lbImg = lb.querySelector('img');
+
+  function open(src, alt){
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    lb.classList.add('show');
+    document.body.classList.add('lb-open');
+    lb.querySelector('.close').focus();
+  }
+  function close(){
+    lb.classList.remove('show');
+    document.body.classList.remove('lb-open');
+    lbImg.removeAttribute('src');
+  }
+
+  document.addEventListener('click', e => {
+    const img = e.target.closest('.shot img, .record .sub');
+    if(img){ open(img.currentSrc || img.src, img.alt); return; }
+    if(lb.classList.contains('show') && e.target !== lbImg) close();
+  });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && lb.classList.contains('show')) close();
+  });
+})();
 </script>
 
 </body>
