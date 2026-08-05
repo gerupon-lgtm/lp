@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>シクミラボ SIKUMI LAB — 動くところまで、やってみる。</title>
+<meta name="description" content="気になったことを手を動かして確かめる、個人の研究室。つくったもの、止まったもの、これからのものの記録。">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --navy:#1C3557;
+  --navy-lift:#35558C;
+  --ink:#1F2A38;
+  --muted:#71829C;
+  --line:#E4E7EC;
+  --line-soft:#EDEFF3;
+  --surface:#FFFFFF;
+  --bg:#FAFBFC;
+  --gray:#90A4C0;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:"Noto Sans JP","Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--sans);line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+
+/* ---- header ---- */
+header{padding:36px 0 0}
+.mark{display:block}
+
+/* ---- hero ---- */
+.hero{padding:56px 0 64px;border-bottom:1px solid var(--line)}
+.hero h1{
+  font-size:clamp(28px,6vw,42px);font-weight:600;
+  letter-spacing:.02em;line-height:1.45;color:var(--navy);
+}
+.hero p{
+  margin-top:20px;max-width:44em;
+  font-size:15px;color:var(--muted);
+}
+.hero p + p{margin-top:12px}
+
+/* ---- section ---- */
+section{padding:56px 0 8px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.sec-head h2{font-size:17px;font-weight:600;letter-spacing:.04em;color:var(--navy)}
+.sec-head .count{font-family:var(--mono);font-size:11px;color:var(--gray)}
+.sec-note{font-size:13px;color:var(--muted);margin-bottom:26px}
+
+/* ---- grid ---- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:720px){.grid{grid-template-columns:1fr;gap:16px}}
+
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:6px;
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.top{display:flex;gap:15px;padding:16px}
+.shot{
+  width:88px;flex:none;aspect-ratio:266/500;
+  background:var(--navy);border-radius:4px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.shot img.wide{object-fit:contain;object-position:center}
+.shot .ph{opacity:.3}
+
+.body{flex:1;min-width:0}
+.tagrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.state{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  padding:2px 8px;border-radius:3px;
+}
+.state.on{background:#EAF0F8;color:var(--navy)}
+.state.off{background:#F1F3F5;color:#8A949F}
+.tech{font-family:var(--mono);font-size:10.5px;color:var(--gray);margin-top:9px;line-height:1.6}
+
+.card h3{font-size:15.5px;font-weight:600;letter-spacing:.01em;line-height:1.55}
+.lede{margin-top:6px;font-size:13px;color:var(--muted)}
+
+.actions{display:flex;gap:8px;padding:0 16px 16px;margin-top:auto}
+button.more,a.visit{
+  font-family:var(--sans);font-size:12.5px;line-height:1;
+  padding:8px 13px;border-radius:4px;cursor:pointer;
+  text-decoration:none;display:inline-block;
+}
+button.more{background:none;border:1px solid var(--line);color:var(--muted)}
+button.more:hover{border-color:var(--gray);color:var(--navy)}
+a.visit{background:var(--navy);border:1px solid var(--navy);color:#fff}
+a.visit:hover{background:var(--navy-lift);border-color:var(--navy-lift)}
+button.more:focus-visible,a.visit:focus-visible{outline:2px solid var(--navy-lift);outline-offset:2px}
+
+/* ---- record ---- */
+.record{display:none;padding:0 16px 4px;border-top:1px solid var(--line-soft);margin-top:4px}
+.record.open{display:block;padding-top:14px}
+.record dl{display:grid;grid-template-columns:auto 1fr;gap:7px 14px}
+.record dt{
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  color:var(--gray);white-space:nowrap;padding-top:5px;
+}
+.record dd{font-size:13px;line-height:1.75;color:var(--ink)}
+.record .sub{display:block;width:100%;margin-top:14px;border:1px solid var(--line);border-radius:4px}
+@media(max-width:420px){
+  .record dl{grid-template-columns:1fr;gap:2px 0}
+  .record dd{margin-bottom:9px}
+}
+
+/* ---- about / footer ---- */
+.about{padding:64px 0 0;border-top:1px solid var(--line);margin-top:64px}
+.about h2{font-size:17px;font-weight:600;letter-spacing:.04em;color:var(--navy);margin-bottom:16px}
+.about p{font-size:14px;color:var(--muted);max-width:44em}
+.about p + p{margin-top:12px}
+footer{padding:48px 0 64px;margin-top:56px;border-top:1px solid var(--line)}
+footer p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--gray)}
+
+/* ---- term tooltip ---- */
+.term{
+  font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;
+  border-bottom:1px dotted var(--gray);cursor:pointer;
+}
+.term:hover{border-bottom-color:var(--navy);color:var(--navy)}
+.term:focus-visible{outline:2px solid var(--navy-lift);outline-offset:2px}
+
+#tip{
+  position:fixed;left:50%;bottom:18px;z-index:60;
+  width:min(620px,calc(100% - 32px));
+  transform:translateX(-50%) translateY(130%);
+  background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--navy);border-radius:6px;
+  box-shadow:0 8px 28px rgba(28,53,87,.18);
+  padding:14px 42px 15px 16px;
+  opacity:0;pointer-events:none;
+  transition:transform .18s ease,opacity .18s ease;
+}
+#tip.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+#tip b{display:block;font-size:12.5px;font-weight:600;color:var(--navy);letter-spacing:.02em;margin-bottom:4px}
+#tip p{font-size:13px;line-height:1.75;color:var(--ink)}
+#tip .x{
+  position:absolute;top:7px;right:9px;width:26px;height:26px;
+  background:none;border:0;border-radius:4px;cursor:pointer;
+  color:var(--muted);font-size:16px;line-height:1;
+}
+#tip .x:hover{background:#F1F3F5;color:var(--navy)}
+@media(prefers-reduced-motion:reduce){#tip{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <svg class="mark" width="170" height="42" viewBox="0 0 170 42" role="img" aria-label="シクミラボ SIKUMI LAB">
+    <g transform="scale(0.65625)">
+      <rect width="64" height="64" rx="8" fill="#1C3557"/>
+      <rect x="17" y="14" width="12" height="36" fill="#FFFFFF"/>
+      <rect x="29" y="38" width="18" height="12" fill="#90A4C0"/>
+    </g>
+    <text x="55" y="20" font-size="19" font-weight="500" textLength="115" lengthAdjust="spacing" fill="#1C3557" font-family="Noto Sans JP,Hiragino Sans,Yu Gothic UI,Meiryo,sans-serif">シクミラボ</text>
+    <text x="55" y="38" font-size="11" textLength="115" lengthAdjust="spacing" fill="#71829C" font-family="Noto Sans JP,Hiragino Sans,Yu Gothic UI,Meiryo,sans-serif">SIKUMI LAB</text>
+  </svg>
+</header>
+
+<div class="hero">
+  <h1>動くところまで、<br>やってみる。</h1>
+  <p>ここは、個人の実験室です。気になったことがあると、まずその仕組みを知りたくなる。ただ、読んで分かった気になるだけでは腑に落ちないので、自分で組み立ててみる。</p>
+  <p>理解するために作り、作ってみて初めて、できるかできないかが分かる。シクミラボという名前も、そこから取りました。</p>
+  <p>実験室なので、並んでいるのは完成品だけではありません。途中で止めたもの、関心が移って放置しているものもそのまま置いています。うまくいかなかったことも、確かめた結果です。</p>
+  <p>思いついたときに始められて、飽きたらそこで止められる。こんなやり方ができるのは、個人の実験室だからです。</p>
+</div>
+
+<main id="works"></main>
+
+<div class="about">
+  <h2>この実験室について</h2>
+  <p>本業では業務システムやRPA、DX推進の仕事をしています。人の手順を仕組みに置き換える仕事なので、そもそも仕組みそのものへの興味が尽きません。その延長で、勤務時間の外に個人で試している記録がここです。</p>
+  <p>誰かに納品するために作っているわけではないので、締切もなければ、完成させる義務もありません。だから途中で止まっているものもそのまま置いてあります。気になるものがあれば、声をかけてください。</p>
+</div>
+
+<footer>
+  <p>&copy; 2026 SIKUMI LAB</p>
+</footer>
+
+</div>
+
+<div id="tip" role="status" aria-live="polite">
+  <button class="x" type="button" aria-label="閉じる">&times;</button>
+  <b></b><p></p>
+</div>
+
+<script>
+/* -------------------------------------------------------------
+   掲載データ
+   image : スクリーンショットのパス。未用意なら null
+   url   : 公開URL。なければ null（ボタンが出ません）
+   ------------------------------------------------------------- */
+const SECTIONS = [
+  {
+    title: "公開しているもの",
+    note: "触れるもの。動いているものも、止めたものもあります。",
+    items: [
+      {
+        name: "四柱推命×バイオリズム診断",
+        state: "稼働中", live: true,
+        tech: "JavaScript / Vercel / Ollama → OpenRouter → Gemini",
+        lede: "命式を組み、バイオリズムと重ねて日ごとの運勢を出します。相性診断つき。",
+        image: "img/shichu.jpg",
+        url: null,
+        record: {
+          q: "友人が作っているのを見て、バイブコーディングの習作として真似てみた。スピリチュアルなものは半信半疑で、根拠があるのか確かめたい気持ちもあった。",
+          m: "命式・十二運・蔵干の算出を自前で実装した。単なる性格傾向診断で終わらないよう、バイオリズムと日付指定、相性診断を足して毎日遊べる形にした。判定はロジックで行い、結果だけを自宅のOllamaに渡してコメントを生成する。届かないときはOpenRouter、さらにGeminiへと順に切り替わる。生年月日などが外部に出ない設計。",
+          w: "十二運のテーブルの誤りや月柱の干支のずれなど、計算の検証にかなり時間を使った。",
+          a: "今も手を入れている。疑っていたはずが、なぜか当たっている気がして日々診断している。"
+        }
+      },
+      {
+        name: "六星占術×バイオリズム診断",
+        state: "稼働中", live: true,
+        tech: "JavaScript / GitHub Pages / Ollama → OpenRouter → Gemini",
+        lede: "別系統の占術で、同じ形が成り立つか試したものです。",
+        image: "img/rokusei.jpg",
+        url: null,
+        record: {
+          q: "四柱推命と同じノリで、別系統の占術でも成り立つか試した。",
+          m: "運命数の算出に加えて、年運・月運・日運のサイクルとバイオリズムを合算し、レーダーチャートとラッキー項目まで出す形にした。コメント生成の仕組みは四柱推命と同じ。",
+          w: "こちらも流派があり、算出方法の試行錯誤を重ねて今の形になった。診断ロジックに不備があった時期も当たっている気がしていたのは内緒。",
+          a: "四柱推命版と同じ画面構成に載せて公開中。"
+        }
+      },
+      {
+        name: "AIリテラシー検定",
+        state: "稼働中", live: true,
+        tech: "JavaScript / Vercel / Ollama → OpenRouter",
+        lede: "20問でAIの理解度を測り、カテゴリ別に可視化します。採点はブラウザ内で完結。",
+        image: "img/ai-test.jpg",
+        url: "https://ai-test.sikumilab.com/",
+        record: {
+          q: "職場で、生成AIの初心者向け教育コンテンツが作れないかと相談があり着手した。",
+          m: "要はクイズの基盤。設問プールとタイトルを差し替えるだけで、まったく別の顔に見せられるのがミソ。結果の傾向だけをローカルのOllamaに渡してコメントを生成する。届かないときだけOpenRouterに回している。",
+          w: "設問の粒度と難易度の調整が難しく、対象者別に複数の問題バンクを作ることになった。",
+          a: "稼働中。"
+        }
+      },
+      {
+        name: "ココロパレア",
+        state: "稼働中", live: true,
+        tech: "JavaScript / GitHub Pages / IPIP日本語50項目版",
+        lede: "ビッグファイブの性格特性を、20問から測れる自己理解ツールです。",
+        image: "img/kokoro.jpg",
+        url: "https://kokoro.sikumilab.com/",
+        record: {
+          q: "スピリチュアルでない診断アプリを作りたくて着手した。",
+          m: "IPIP日本語50項目版を使い、20問の簡易プレビューから、希望すれば50問の詳細まで進める二段構えにした。判定はきちんとしつつ、心理学の専門家に評価してもらえる人脈もないため、エンタメ要素を多めに入れた。猫の「もなか」をイメージキャラクターに据え、画像の用意、判定文の添削、アロマ要素とパレットの確認で、なかなかの作業量になった。",
+          w: "断定的な性格タイプに見せると誤解を生むため、あくまで自己理解の材料であることを画面上で明示する必要があった。",
+          a: "「もなか」が可愛く表現できた。初めてブランドイメージを真面目に検討した回で、シクミラボという名前もここから生まれた。"
+        }
+      },
+      {
+        name: "姓名診断",
+        state: "稼働中", live: true,
+        tech: "JavaScript / Vercel / Ollama",
+        lede: "熊崎式の五格に四柱推命の五行を重ねる姓名判断。ペットの命名にも使えます。",
+        image: "img/naming.jpg",
+        url: null,
+        record: {
+          q: "友人との会話から思いついた。名前の画数で人格が分かるのか、と疑ってはいた。",
+          m: "熊崎式で五格を算出し、生年月日を入れると四柱推命と同じエンジンで五行のボーナスも判定する。命名にも使えるようにした。当初はロジックと漢字の無料APIで候補を出していたが、暴走族のような当て字ばかり生成されたため、Ollamaに候補を出させて姓名判断のロジックで採点する形に変えた。",
+          w: "流派によって画数の数え方が違うため、一つに決めたうえで、その旨を画面に明記する形に落ち着いた。",
+          a: "シクミラボのスピリチュアル系では、いちばん評価が高い。稼働中。"
+        }
+      },
+      {
+        name: "GALAXY SHOT",
+        state: "公開中", live: true,
+        tech: "HTML5 Canvas / Web Audio API",
+        lede: "1ファイルに詰め込んだシューティング。パワーアップもBGMもあります。",
+        image: "img/galaxy-shot.jpg",
+        url: null,
+        record: {
+          q: "HTML5 CanvasとWeb Audio APIだけで、シューティングがどこまで作れるか試した。",
+          m: "1ファイルの中に、パワーアップ、ボーナスステージ、BGM、モバイル向けパッド、LocalStorageのランキングまで詰め込んだ。",
+          w: "詰め込みすぎではあるが、Web Audio APIとLocalStorageの便利さに目覚めた最初の仕組みになった。",
+          a: "かなり気に入っていて、移動中に自分で遊んでいる。"
+        }
+      },
+      {
+        name: "QRコードバトル",
+        state: "放置中", live: false,
+        tech: "JavaScript / OCI",
+        lede: "身の回りのQRコードをスキャンしてアイテムに変え、デッキを組んで戦います。",
+        image: "img/qr.jpg",
+        url: null,
+        record: {
+          q: "身の回りにあるQRコードを、ゲームの素材にできないか気になった。",
+          m: "スキャンしたコードをアイテムに変換し、デッキを組んで戦う形にした。最初に選ぶ相棒で戦い方が変わるようにして、登録なしの匿名でも始められるようにした。",
+          w: "MVPまで到達して公開。今もサーバーで動いている。",
+          a: "別の疑問に関心が移り、そのまま放置中。"
+        }
+      },
+      {
+        name: "GPS連携ゲーム＋管理画面",
+        state: "放置中", live: false,
+        tech: "Geolocation API / Leaflet / MapTiler / Caddy / OCI",
+        lede: "実際に足を運んだ場所を判定する、位置情報ゲームです。",
+        image: "img/gps.jpg",
+        sub: ["img/gps-admin.jpg", "img/gps-csvtool.jpg"],
+        url: null,
+        record: {
+          q: "位置情報がブラウザだけでどこまで使えるか気になった。",
+          m: "50m半径・精度100mを閾値にした判定と、CSVによる検証用データベース、管理画面を用意した。スポットの座標データを作るための変換ツールも別に作った。",
+          w: "屋内や建物の陰では精度が出ず、閾値の設定に苦労した。",
+          a: "こちらも関心が移って放置中。"
+        }
+      },
+      {
+        name: "シューティングゲーム等",
+        state: "検証のみ", live: false,
+        tech: "HTML5 Canvas",
+        lede: "操作の手触りを試すために作った、小ぶりなゲームです。",
+        image: "img/shooting.jpg",
+        url: null,
+        record: {
+          q: "自機の動きに慣性のような制約を入れると、操作の手触りがどう変わるか気になった。",
+          m: "前進中は左右移動が極端に鈍くなる挙動を入れ、キーボードとタッチの両方の操作系を同じ画面に載せた。特殊攻撃はゲージが溜まったときだけ撃てる形にした。",
+          w: "制約を強くすると難しくなりすぎ、弱くすると入れた意味がなくなる。その中間を探すのに時間を使った。",
+          a: "手触りの違いは確かめられたので、ここまで。"
+        }
+      },
+      {
+        name: "リズムゲーム beat-poc / battle-poc",
+        state: "検証のみ", live: false,
+        tech: "Web Audio API / Vibration API",
+        lede: "音源を差し替えられるリズムゲームと、それを戦闘に組み込んだ試作です。",
+        image: "img/rhythm.jpg",
+        url: null,
+        record: {
+          q: "Web Audio API で複数の音源を同期させ、リズムゲームとして成立するか気になった。",
+          m: "音源を外部から差し替えられる構造にして、タップで得点を取る形にした。BPM・判定幅・コンボを持たせ、リズムをそのまま戦闘の攻撃判定に使う版も作った。",
+          w: "Android では触覚フィードバックまで動いたが、iOS では Vibration API が使えなかった。",
+          a: "検証としては十分だったので、ここまで。"
+        }
+      }
+    ]
+  },
+  {
+    title: "手元で使っているもの",
+    note: "公開はしていませんが、日常的に動かしているものです。",
+    items: [
+      {
+        name: "AI-OCR",
+        state: "使用中", live: true,
+        tech: "Qwen3-VL-4B / Ollama / Cloudflare Tunnel",
+        lede: "手元のGPUだけで、写真や文書を読み取ってテキストに起こします。",
+        image: "img/ocr.jpg",
+        url: null,
+        record: {
+          q: "ローカルのGPUだけで、日本語文書の読み取りがどこまで実用になるか気になった。",
+          m: "複数のVLMを比較検証し、Qwen3-VL-4B に落ち着いた。単体処理とバッチ処理を用意し、結果はテキストとMarkdownの両方で出せるようにした。",
+          w: "出力が崩れるパターン（空セルの表、レイアウトラベルのみの出力）があり、検出処理を足して安定させた。",
+          a: "今も日常的に使用中。"
+        }
+      },
+      {
+        name: "株価ポートフォリオアプリ",
+        state: "使用中", live: true,
+        tech: "Python / Flask / yfinance / Tailscale / Gemini API",
+        lede: "自分が見たい形で保有銘柄を並べる、自分専用の画面です。",
+        image: "img/stock.jpg",
+        url: null,
+        record: {
+          q: "既存のツールでは見たい形にならなかったので、自分で作れば済むのか試した。",
+          m: "yfinance とスプレッドシートから相場を取得し、テーマ切替とグラフを付けて、Tailscale 経由でどこからでも見られるようにした。保有銘柄のアナリスト評価をまとめる機能も足した。",
+          w: "スクロールの描画が崩れる問題があり、仮想グリッドを自前で組んで解決した。アナリスト評価の分析はローカルLLMだと調べものの部分で力が足りず、そこだけ Gemini API に任せている。",
+          a: "今も毎日使っている。"
+        }
+      },
+      {
+        name: "ローカルLLM環境",
+        state: "使用中", live: true,
+        tech: "Ollama / Open WebUI / GTX 1080 + 1060 / Cloudflare Tunnel",
+        lede: "自宅のGPUでLLMを動かし、外からも使える状態にしています。",
+        image: "img/localllm.jpg",
+        url: null,
+        record: {
+          q: "手元のGPUで、実用になるLLMがどこまで動くか気になった。",
+          m: "デュアルGPU構成のWindows機にOllamaとOpen WebUIを立て、Cloudflare Tunnel で外部からも使えるようにした。既存のものを組み合わせただけで、自作したものではない。",
+          w: "VRAMの制約でモデル選定に苦労した。画像生成と同時に動かすと取り合いになる。",
+          a: "検証の土台として、今も動かし続けている。"
+        }
+      },
+      {
+        name: "Excel/CSV→JSON 変換ツール",
+        state: "使用中", live: true,
+        tech: "Python / デスクトップアプリ",
+        lede: "ExcelやCSVの設問表を、検定が読み込むJSONに変換する手元の道具です。",
+        image: "img/csv2json.jpg",
+        wide: true,
+        sub: "img/csv2json.jpg",
+        url: null,
+        record: {
+          q: "設問データの整形を、クラウドに預けずに手元で完結させたかった。",
+          m: "ローカルで動くデスクトップアプリとして作った。難易度の指定、カテゴリ別の件数集計、ヘッダー行の判定結果を画面に出して、保存前に確認できるようにした。",
+          w: "元のExcelの体裁がまちまちで、ヘッダー行の位置を機械的に決められなかった。判定結果をログに出して、人が確認する形に落ち着かせた。",
+          a: "検定の設問を作るたびに使っている。"
+        }
+      },
+      {
+        name: "Presenton",
+        state: "使用中", live: true,
+        tech: "Presenton / Ollama / セルフホスト",
+        lede: "既存のスライド生成ツールを、自宅のローカルLLMにつないで動かしています。",
+        image: "img/presenton.jpg",
+        url: null,
+        record: {
+          q: "資料作成がどこまで自動化できるか気になった。",
+          m: "既存のOSSを自宅に立て、生成先を手元のOllamaに向けて、Tunnel 経由で使えるようにした。自作ではなく、既存の仕組みを試している。",
+          w: "ローカルモデルで動かしているため画像生成は使えず、出来上がる構成もモデルの性能に左右される。",
+          a: "個人の資料作りに使用中。"
+        }
+      }
+    ]
+  },
+  {
+    title: "止まったもの・転換したもの",
+    note: "動かなかったもの、コストが合わなかったもの。検証としては役に立っています。",
+    items: [
+      {
+        name: "旅行プラン作成支援ツール",
+        state: "中断", live: false,
+        tech: "ローカルLLM → Google Maps API",
+        lede: "行き先の候補と移動を組み立てる、プラン作成の支援ツールです。",
+        image: "img/travel.jpg",
+        wide: true,
+        sub: "img/travel.jpg",
+        url: null,
+        record: {
+          q: "旅行プランの組み立てを、どこまで自動化できるか気になった。",
+          m: "はじめはローカルLLMで組んだが、日本の地理や最近の情報をあまり知らなかったため、Google Maps API のみで構成し直した。",
+          w: "方向転換でそれなりに成果は出たが、APIのコストが見合わず、続けられなくなった。",
+          a: "ここで中断。ローカルLLMの限界を実測できたので、良い検証だった。同じ関心は、その後この行程づくり自体をAIへの手順書にまとめる形で作り直している。"
+        }
+      },
+      {
+        name: "MediaVault",
+        state: "停止", live: false,
+        tech: "Python / CustomTkinter / aHash",
+        lede: "画像の一覧と、似た画像の検出ができるビューアです。",
+        image: "img/mediavault.jpg",
+        wide: true,
+        sub: "img/mediavault.jpg",
+        url: null,
+        record: {
+          q: "大量の画像を、手元で快適に見て探せる道具が作れるか試した。",
+          m: "仮想グリッドのサムネイル表示、日本語UI、aHashによる類似画像検出まで作り、実行ファイルにまとめた。",
+          w: "作り切ったものの、自分の使い方には合わなかった。",
+          a: "現在は使っていない。仮想グリッドの実装は、後の株価アプリに流用できた。"
+        }
+      }
+    ]
+  },
+  {
+    title: "これからのもの",
+    note: "手をつけている最中、あるいはこれから始めるものです。",
+    items: [
+      {
+        name: "あとキュー（仮称）",
+        state: "開発中", live: true,
+        tech: "PWA / localStorage",
+        lede: "思いついたことを数秒で退避して、あとで行動に戻すためのツールです。",
+        image: null,
+        url: null,
+        record: {
+          q: "作業中に浮かんだ用事を、集中を切らさずに逃がす方法はないか気になった。",
+          m: "入力時に分類を求めない受信箱と、あとから整理を提案する画面を持つPWAとして設計した。",
+          w: "端末内で完結させるか、AI解析のための中継APIを用意するかが、まだ決まっていない。",
+          a: "構想をまとめ終えて、開発中。"
+        }
+      },
+      {
+        name: "ComfyUI を MCP 経由で使う",
+        state: "着手予定", live: false,
+        tech: "ComfyUI / MCP",
+        lede: "手元のGPUで画像生成を回し、対話から呼び出せるようにする構想です。",
+        image: null,
+        url: null,
+        record: {
+          q: "画像生成も手元で完結させられないか気になった。",
+          m: "既存のGPU機にComfyUIを入れ、MCP経由で呼び出す構成を想定している。",
+          w: "Ollamaと同時に動かすとVRAMを取り合うため、そこの整理が要る。",
+          a: "まだ着手していない。"
+        }
+      }
+    ]
+  },
+  {
+    title: "つくった仕組み",
+    note: "アプリではなく、作り方そのものを整えたものです。",
+    items: [
+      {
+        name: "開発パイプラインのスキル",
+        state: "説明のみ", live: false,
+        tech: "Claude Skills",
+        lede: "思いつきから実装までを、四段階に分けて進めるための手順書です。",
+        image: null,
+        url: null,
+        record: {
+          q: "AIに開発を任せるとき、どこまで手前を整えれば安定するのか気になった。",
+          m: "構想のたたき台づくり、要件定義、基本設計、実装の分担という四段階に分け、それぞれを手順書にした。",
+          w: "工程を分けるだけでは戻りが扱えず、前工程へのフィードバック経路と、次に進んでよいかの判定を足した。",
+          a: "自分の開発の下敷きとして使っている。中身は公開していない。"
+        }
+      },
+      {
+        name: "旅行しおり作成スキル",
+        state: "説明のみ", live: false,
+        tech: "Claude Skills / Python / openpyxl",
+        lede: "車移動の旅行について、しおりと費用計算表を組み立てる手順書です。",
+        image: null,
+        url: null,
+        record: {
+          q: "旅行の行程づくりは毎回ほぼ同じ手順を踏むので、AIに渡せる形にまとめられないか気になった。",
+          m: "出発地や人数のヒアリングから、王道・穴場・雨天の三案づくり、Markdownのしおり生成、Excelの費用計算表出力までを一つの手順にした。過去に自分で作ったしおりを実例として同梱し、文章の密度の基準にしている。",
+          w: "営業時間や料金は間違うと当日そのまま破綻するので、裏取りできない値を書かせない歯止めが要った。有料道路の通行料を台数分で数え忘れる、といった計算の穴も潰した。",
+          a: "手元で使っている。中身は公開していない。"
+        }
+      },
+      {
+        name: "用語ツールチップ導入スキル",
+        state: "説明のみ", live: false,
+        tech: "Claude Skills / Node.js",
+        lede: "本文中の専門用語に解説を出す仕組みを、稼働中のシステムにも後から入れるための手順書です。",
+        image: null,
+        url: null,
+        record: {
+          q: "用語解説のツールチップを、新規案件だけでなく既に動いているシステムにも後付けできないか気になった。",
+          m: "用語辞書のCSVだけに依存する形にして、既存の画面の文言には一切手を入れずに導入できるようにした。初回導入と辞書のメンテナンスで、進み方が分かれるようにしている。",
+          w: "短い語が長い語の一部に反応する誤爆（「金」が「金曜日」に当たるなど）は避けられないため、用語を消すのではなく長いほうをブロック語として登録する方式に落ち着かせた。",
+          a: "手元で使っている。中身は公開していない。"
+        }
+      }
+    ]
+  }
+];
+
+/* ---------- rendering ---------- */
+const PLACEHOLDER = `
+  <svg class="ph" width="34" height="34" viewBox="0 0 64 64" aria-hidden="true">
+    <rect x="17" y="14" width="12" height="36" fill="#FFFFFF"/>
+    <rect x="29" y="38" width="18" height="12" fill="#90A4C0"/>
+  </svg>`;
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function cardHTML(item, id){
+  const shot = item.image
+    ? `<img class="${item.wide ? 'wide' : ''}" src="${esc(item.image)}" alt="${esc(item.name)}の画面" loading="lazy">`
+    : PLACEHOLDER;
+  const visit = item.url
+    ? `<a class="visit" href="${esc(item.url)}" target="_blank" rel="noopener">開く</a>`
+    : '';
+  const r = item.record;
+  return `
+  <article class="card">
+    <div class="top">
+      <div class="shot">${shot}</div>
+      <div class="body">
+        <div class="tagrow">
+          <span class="state ${item.live ? 'on' : 'off'}">${esc(item.state)}</span>
+        </div>
+        <h3>${esc(item.name)}</h3>
+        <p class="lede">${esc(item.lede)}</p>
+        <p class="tech">${esc(item.tech)}</p>
+      </div>
+    </div>
+    <div class="record" id="rec-${id}">
+      <dl>
+        <dt>気になったこと</dt><dd>${esc(r.q)}</dd>
+        <dt>つくったもの</dt><dd>${esc(r.m)}</dd>
+        <dt>ぶつかったこと</dt><dd>${esc(r.w)}</dd>
+        <dt>どうしたか</dt><dd>${esc(r.a)}</dd>
+      </dl>
+      ${(item.sub ? [].concat(item.sub) : []).map(src =>
+        `<img class="sub" src="${esc(src)}" alt="${esc(item.name)}の画面" loading="lazy">`).join('')}
+    </div>
+    <div class="actions">
+      <button class="more" type="button" aria-expanded="false" aria-controls="rec-${id}">記録を読む</button>
+      ${visit}
+    </div>
+  </article>`;
+}
+
+const main = document.getElementById('works');
+let n = 0;
+main.innerHTML = SECTIONS.map(sec => `
+  <section>
+    <div class="sec-head">
+      <h2>${esc(sec.title)}</h2>
+      <span class="count">${sec.items.length}</span>
+    </div>
+    <p class="sec-note">${esc(sec.note)}</p>
+    <div class="grid">${sec.items.map(it => cardHTML(it, n++)).join('')}</div>
+  </section>`).join('');
+
+main.addEventListener('click', e => {
+  const btn = e.target.closest('button.more');
+  if(!btn) return;
+  const rec = document.getElementById(btn.getAttribute('aria-controls'));
+  const willOpen = !rec.classList.contains('open');
+
+  // 開いている記録は常に1つだけにする
+  main.querySelectorAll('.record.open').forEach(r => r.classList.remove('open'));
+  main.querySelectorAll('button.more[aria-expanded="true"]').forEach(b => {
+    b.setAttribute('aria-expanded','false');
+    b.textContent = '記録を読む';
+  });
+
+  if(willOpen){
+    rec.classList.add('open');
+    btn.setAttribute('aria-expanded','true');
+    btn.textContent = '閉じる';
+  }
+});
+
+/* -------------------------------------------------------------
+   用語ツールチップ
+   TERMS に足すだけで、ページ全体の本文に自動で反映されます。
+   BLOCK は「その語の中では反応させたくない」長い語を書きます。
+   （例: "AI-OCR" を入れておくと、その中の "OCR" は光りません）
+   ------------------------------------------------------------- */
+const TERMS = {
+  "JavaScript":"Webページに動きや処理をつけるためのプログラミング言語。ブラウザがそのまま実行できる。",
+  "Python":"読み書きしやすく、道具づくりやデータ処理に広く使われるプログラミング言語。",
+  "Node.js":"ブラウザの外でJavaScriptを動かすための実行環境。",
+  "CustomTkinter":"Pythonでデスクトップアプリの画面を作るための道具。",
+  "openpyxl":"PythonからExcelファイルを読み書きするためのライブラリ。",
+  "Claude Skills":"Claudeに作業手順をあらかじめ教えておき、必要なときに呼び出させる仕組み。",
+  "ComfyUI":"画像生成を、処理の流れを組み立てる形で扱えるソフト。手元のGPUで動かせる。",
+  "Presenton":"入力した内容からスライドの下書きを生成するソフト。自分で立てて使える。",
+  "Google Maps API":"地図や場所の情報、経路などを、外部のプログラムから使えるようにした窓口。",
+  "ローカルLLM":"クラウドではなく手元の機器で動かす大規模言語モデル。入力が外に出ない。",
+  "LLM":"大量の文章から言葉のつながりを学習した、文章を生成するAIモデル。",
+  "セルフホスト":"外部のサービスを借りず、自分の用意した機器でソフトを動かすこと。",
+  "バイブコーディング":"細かく指示を書かず、AIと会話しながら流れで実装を進める作り方。",
+  "運命数":"生年月日から一定の計算で割り出す数値。六星占術で運気の型を決める。",
+  "localStorage":"ブラウザの中にデータを保存しておく仕組み。サーバーを使わずに記録を残せる。",
+  "Gemini API":"Googleの生成AIを、外部のプログラムから使えるようにした窓口。",
+  "Gemini":"Googleが提供する生成AIモデル。",
+  "Web Audio API":"ブラウザ上で音を合成したり、細かいタイミングで再生したりするための仕組み。",
+  "Vibration API":"ブラウザから端末を振動させるための仕組み。iOSのSafariでは使えない。",
+  "Geolocation API":"ブラウザで端末の現在地を取得するための仕組み。",
+  "HTML5 Canvas":"ブラウザ上に絵を一点ずつ描くための領域。ゲームやグラフの描画に使う。",
+  "LocalStorage":"ブラウザの中にデータを保存しておく仕組み。サーバーを使わずに記録を残せる。",
+  "PWA":"Webページのままインストールでき、アプリのように使える作り方。",
+  "VRAM":"GPUが持つ専用のメモリ。動かせるAIモデルの大きさを左右する。",
+  "VLM":"画像と文章の両方を扱えるAIモデル。文書の読み取りなどに使う。",
+  "OCR":"画像の中の文字を読み取って、テキストに起こす技術。",
+  "MVP":"最低限動く形まで作った最初の版。方向性を確かめるために作る。",
+  "RPA":"パソコン上の定型作業を、ソフトに代行させる仕組み。",
+  "DX":"業務のやり方そのものを、デジタル前提に組み替えること。",
+  "MCP":"AIから外部のツールやデータを呼び出すための、共通の決まりごと。",
+  "Ollama":"手元のパソコンでAIモデルを動かすためのソフト。",
+  "Open WebUI":"ローカルで動くAIモデルに、ブラウザから話しかけるための画面。",
+  "Qwen3-VL-4B":"画像も扱える小型のAIモデル。手元のGPUでも動かせる大きさ。",
+  "OpenRouter":"複数の提供元のAIモデルを、同じ窓口から使えるようにするサービス。",
+  "Cloudflare Tunnel":"自宅の機器を、ルーターの設定を変えずに外から使えるようにする仕組み。",
+  "Tailscale":"離れた端末どうしを、同じLANの中にいるようにつなぐサービス。",
+  "Flask":"Pythonで小さなWebアプリを作るための道具。",
+  "yfinance":"株価などの相場データを取得するPythonのライブラリ。",
+  "Vercel":"Webアプリを公開し、サーバー側の処理も動かせるサービス。",
+  "GitHub Pages":"GitHubのリポジトリの中身を、そのままWebサイトとして公開できる仕組み。",
+  "OCI":"Oracleのクラウドサービス。ここでは常時動かすサーバーの置き場所として使っている。",
+  "Caddy":"Webサーバーの一種。HTTPSの証明書を自動で用意してくれる。",
+  "Leaflet":"地図を表示するためのJavaScriptのライブラリ。",
+  "MapTiler":"地図の画像データを提供するサービス。",
+  "フォールバック":"本命の手段が使えなかったときに、自動で次の手段へ切り替える仕組み。",
+  "仮想グリッド":"画面に映っている分だけを描画して、項目が大量にあっても軽く動かす作り方。",
+  "aHash":"画像をごく粗い特徴に置き換えて、似た画像を素早く探すための方法。",
+  "四柱推命":"生年月日時を干支に置き換えて運勢を読む、中国由来の占術。",
+  "命式":"四柱推命で、生年月日時から組み立てる四本の柱。読み解きの土台になる。",
+  "十二運":"命式の各柱の勢いを、生まれてから朽ちるまでの十二段階で表したもの。",
+  "蔵干":"十二支の中に隠れている干。表に出ない性質を読むために使う。",
+  "六星占術":"生年月日から運命数を割り出し、運気の周期を読む占術。",
+  "バイオリズム":"生年月日を起点に、身体・感情・知性の調子が周期的に上下するという考え方。",
+  "ビッグファイブ":"性格を五つの因子で捉える、心理学で広く使われている枠組み。",
+  "IPIP":"ビッグファイブを測る質問項目を、誰でも使える形で公開している項目集。",
+  "熊崎式":"姓名判断の流派の一つ。画数の数え方や五格の立て方に独自の決まりがある。",
+  "五格":"姓名判断で、姓名の画数から組み立てる五種類の運勢の枠。",
+  "五行":"木・火・土・金・水の五つで、ものごとの性質と相性を捉える東洋の考え方。",
+  "BPM":"一分あたりの拍数。曲の速さを表す。",
+  "レーダーチャート":"複数の項目の大小を、多角形の形で一目で見せるグラフ。"
+};
+
+const BLOCK = ["AI-OCR"];
+
+(function(){
+  const keys = Object.keys(TERMS).concat(BLOCK)
+    .sort((a,b) => b.length - a.length)
+    .map(k => k.replace(/[.*+?^${}()|[\]\\-]/g,'\\$&'));
+  if(!keys.length) return;
+  const re = new RegExp('(' + keys.join('|') + ')','g');
+  const SKIP = new Set(['SCRIPT','STYLE','BUTTON','A','CODE','H1','H2']);
+
+  function markup(root){
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(n){
+        if(!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        for(let p = n.parentElement; p && p !== root.parentElement; p = p.parentElement){
+          if(SKIP.has(p.tagName) || p.classList.contains('term')) return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const targets = [];
+    let n; while((n = walker.nextNode())) if(re.test(n.nodeValue)){ re.lastIndex = 0; targets.push(n); }
+
+    for(const node of targets){
+      const frag = document.createDocumentFragment();
+      let last = 0; re.lastIndex = 0; let m;
+      while((m = re.exec(node.nodeValue))){
+        const word = m[1];
+        if(m.index > last) frag.appendChild(document.createTextNode(node.nodeValue.slice(last, m.index)));
+        if(TERMS[word]){
+          const b = document.createElement('button');
+          b.type = 'button'; b.className = 'term';
+          b.dataset.term = word; b.dataset.def = TERMS[word];
+          b.setAttribute('aria-label', word + 'の説明を見る');
+          b.textContent = word;
+          frag.appendChild(b);
+        } else {
+          frag.appendChild(document.createTextNode(word));
+        }
+        last = m.index + word.length;
+      }
+      if(last < node.nodeValue.length) frag.appendChild(document.createTextNode(node.nodeValue.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    }
+  }
+
+  ['.hero','#works','.about'].forEach(sel => {
+    const el = document.querySelector(sel); if(el) markup(el);
+  });
+
+  const tip = document.getElementById('tip');
+  const tipTitle = tip.querySelector('b');
+  const tipBody  = tip.querySelector('p');
+  let current = null;
+
+  function show(btn){
+    tipTitle.textContent = btn.dataset.term;
+    tipBody.textContent  = btn.dataset.def;
+    tip.classList.add('show');
+    current = btn;
+  }
+  function hide(){ tip.classList.remove('show'); current = null; }
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.term');
+    if(btn){ (current === btn) ? hide() : show(btn); return; }
+    if(!e.target.closest('#tip')) hide();
+  });
+  tip.querySelector('.x').addEventListener('click', hide);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') hide(); });
+
+  if(window.matchMedia && window.matchMedia('(hover:hover)').matches){
+    document.addEventListener('mouseover', e => {
+      const btn = e.target.closest('.term');
+      if(btn && btn !== current) show(btn);
+    });
+  }
+})();
+
+</script>
+
+</body>
+</html>
