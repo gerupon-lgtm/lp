@@ -111,6 +111,17 @@ button.more:focus-visible,a.visit:focus-visible{outline:2px solid var(--navy-lif
   .record dd{margin-bottom:9px}
 }
 
+
+/* ---- learn ---- */
+.learn{padding:64px 0 0;border-top:1px solid var(--line);margin-top:64px}
+.learn h2{font-size:17px;font-weight:600;letter-spacing:.04em;color:var(--navy);margin-bottom:16px}
+.learn p{font-size:14px;color:var(--muted);max-width:44em}
+.learn p + p{margin-top:12px}
+.about .mail{
+  margin-top:18px;font-family:var(--mono);font-size:13px;
+  letter-spacing:.04em;color:var(--navy);
+}
+
 /* ---- about / footer ---- */
 .about{padding:64px 0 0;border-top:1px solid var(--line);margin-top:64px}
 .about h2{font-size:17px;font-weight:600;letter-spacing:.04em;color:var(--navy);margin-bottom:16px}
@@ -192,18 +203,27 @@ body.lb-open{overflow:hidden}
 <div class="hero">
   <h1>動くところまで、<br>やってみる。</h1>
   <p>ここは、個人の実験室です。気になったことがあると、まずその仕組みを知りたくなる。ただ、読んで分かった気になるだけでは腑に落ちないので、自分で組み立ててみる。</p>
-  <p>理解するために作り、作ってみて初めて、できるかできないかが分かる。シクミラボという名前もそこから取りました。</p>
+  <p>理解するために作り、作ってみて初めてできるかできないかが分かる。シクミラボという名前もそこから取りました。</p>
   <p>実験室なので、並んでいるのは完成品だけではありません。途中で止めたもの、関心が移って放置しているものもそのまま置いています。うまくいかなかったことも実験の結果。</p>
   <p>思いついたときに始められて、飽きたらそこで止められる。こんなやり方ができるのは、個人の実験室だからです。</p>
 </div>
 
 <main id="works"></main>
 
+<div class="learn">
+  <h2>やってみて分かったこと</h2>
+  <p>どんな技術も、その振る舞いと使うための手順さえ分かれば、格段に付き合いやすくなります。中身の原理を全部理解していなくても、「どう動くか」「どういう順で触ればいいか」が掴めれば、道具として使えるようになる。</p>
+  <p>そして一見難しそうに見えるものも、ほどいていくと、小さくて簡単な仕組みの組み合わせでできています。難しいのは個々の部品ではなく、それをどう組むかの方でした。</p>
+  <p>いま手こずっているのは、UI/UXの設計です。動くものは作れても、使う人にとって自然な形にするのは別の難しさがあります。ここも手順として整理できないか、落ち着いたら考えるつもりです。</p>
+  <p>ほどいて分かった小さな仕組みを、今度は組み合わせてみたい。それぞれは地味でも、掛け合わせれば化学反応のように、想像もつかない面白いものになるかもしれません。</p>
+</div>
+
 <div class="about">
   <h2>この実験室について</h2>
   <p>ギターを教えたり、顧客に業務のことを聞いたり、新人に説明したり。人と向き合って言葉をやりとりする仕事を長くしてきました。</p>
   <p>そこで繰り返し突きつけられたのは、正しく聞いて、正しく理解して、正しく説明する、という当たり前のことの難しさです。分かったつもりで話すと、どこかで必ず齟齬が出る。だから自分で組み立ててみる。できることを確かめてあれば、自分の言葉として安心して伝えられます。</p>
   <p>誰かに納品するために作っているわけではないので、締切もなければ、完成させる義務もありません。だから途中で止まっているものもそのまま置いてあります。気になるものがあれば、声をかけてください。</p>
+  <p class="mail">hello@sikumilab.com</p>
 </div>
 
 <footer>
@@ -692,6 +712,7 @@ const TERMS = {
   "PostgreSQL":"広く使われているオープンソースのデータベース。",
   "React":"画面の部品を組み合わせてUIを作るためのJavaScriptライブラリ。",
   "Codex":"OpenAIが提供する、コードを書かせるためのAIエージェント。",
+  "UI/UX":"画面の見た目や操作（UI）と、使ったときの体験全体（UX）のこと。",
   "Web Audio API":"ブラウザ上で音を合成したり、細かいタイミングで再生したりするための仕組み。",
   "Vibration API":"ブラウザから端末を振動させるための仕組み。iOSのSafariでは使えない。",
   "Geolocation API":"ブラウザで端末の現在地を取得するための仕組み。",
@@ -783,7 +804,7 @@ const BLOCK = ["AI-OCR"];
     }
   }
 
-  ['.hero','#works','.about'].forEach(sel => {
+  ['.hero','#works','.learn','.about'].forEach(sel => {
     const el = document.querySelector(sel); if(el) markup(el);
   });
 
