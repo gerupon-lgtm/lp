@@ -106,6 +106,7 @@ button.more:focus-visible,a.visit:focus-visible{outline:2px solid var(--navy-lif
 }
 .record dd{font-size:13px;line-height:1.75;color:var(--ink)}
 .record .sub{display:block;width:100%;margin-top:14px;border:1px solid var(--line);border-radius:4px}
+.record .icon-sm{display:block;width:56px;height:56px;margin-top:14px;border-radius:13px;border:1px solid var(--line)}
 @media(max-width:420px){
   .record dl{grid-template-columns:1fr;gap:2px 0}
   .record dd{margin-bottom:9px}
@@ -253,6 +254,22 @@ const SECTIONS = [
     title: "触れるもの",
     note: "URLを開けば、その場で試せます。",
     items: [
+      {
+        name: "あとキュー（仮称）",
+        state: "開発中", live: true,
+        tech: "PWA / React / localStorage / Web Push / Fastify / PostgreSQL / OCI",
+        lede: "思いついたことを数秒で退避して、あとで行動に戻すためのツールです。",
+        image: "img/atoqueue-2.jpg",
+        icon: "img/atoqueue-icon.jpg",
+        sub: ["img/atoqueue.jpg", "img/atoqueue-notify.jpg"],
+        url: "https://atoqueue.sikumilab.com/",
+        record: {
+          q: "作業中に浮かんだ用事を、集中を切らさずに逃がす方法はないか気になった。",
+          m: "入力時に分類を求めない受信箱、あとから整理する画面、放置の度合いに応じて声を掛ける「今日の確認」を持つPWAにした。本文は端末内のlocalStorageだけに置き、サーバーへは匿名の通知予約しか送らない。通知に出せるのは「確認したい項目があります」だけで、中身は端末の外に出ない。",
+          w: "通知がなかなか飛ばなかった。PWAだけでは閉じている間の定期実行を保証できないのでWeb Push用の最小のバックエンドを併設したが、そこから先が長かった。バックエンド側の配送処理、端末側の通知設定、ブラウザの権限と、要因が複合していて、一つずつ潰していくしかない。しかも一定時間後に飛ぶ仕組みなので、待っては飛ばず、直しては待つの繰り返しだった。",
+          a: "設計を終えて開発中。ひととおり触れる状態になったので公開した。いまも手を入れている最中。"
+        }
+      },
       {
         name: "四柱推命×バイオリズム診断",
         state: "稼働中", live: true,
@@ -525,20 +542,6 @@ const SECTIONS = [
     note: "手をつけている最中、あるいはこれから始めるものです。",
     items: [
       {
-        name: "あとキュー（仮称）",
-        state: "開発中", live: true,
-        tech: "PWA / React / localStorage / Web Push / Fastify / PostgreSQL / OCI",
-        lede: "思いついたことを数秒で退避して、あとで行動に戻すためのツールです。",
-        image: null,
-        url: null,
-        record: {
-          q: "作業中に浮かんだ用事を、集中を切らさずに逃がす方法はないか気になった。",
-          m: "入力時に分類を求めない受信箱、あとから整理する画面、放置の度合いに応じて声を掛ける「今日の確認」を持つPWAにした。本文は端末内のlocalStorageだけに置き、サーバーへは匿名の通知予約しか送らない。",
-          w: "PWAだけでは閉じている間の定期実行を保証できないため、Web Push用の最小のバックエンドを併設することになった。本文がAPIやログ、通知の中身に出ないことを、テストで確かめる作りにしている。",
-          a: "設計を終えて開発中。"
-        }
-      },
-      {
         name: "ComfyUI を MCP 経由で使う",
         state: "着手予定", live: false,
         tech: "ComfyUI / MCP",
@@ -641,6 +644,7 @@ function cardHTML(item, id){
         <dt>ぶつかったこと</dt><dd>${esc(r.w)}</dd>
         <dt>どうしたか</dt><dd>${esc(r.a)}</dd>
       </dl>
+      ${item.icon ? `<img class="icon-sm" src="${esc(item.icon)}" alt="${esc(item.name)}のアイコン" loading="lazy">` : ''}
       ${(item.sub ? [].concat(item.sub) : []).map(src =>
         `<img class="sub" src="${esc(src)}" alt="${esc(item.name)}の画面" loading="lazy">`).join('')}
     </div>
