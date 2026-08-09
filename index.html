@@ -107,6 +107,14 @@ button.more:focus-visible,a.visit:focus-visible{outline:2px solid var(--navy-lif
 .record dd{font-size:13px;line-height:1.75;color:var(--ink)}
 .record .sub{display:block;width:100%;margin-top:14px;border:1px solid var(--line);border-radius:4px}
 .record .icon-sm{display:block;width:56px;height:56px;margin-top:14px;border-radius:13px;border:1px solid var(--line)}
+.record .origin{
+  margin-top:14px;padding-top:11px;border-top:1px solid var(--line-soft);
+  font-size:12px;line-height:1.7;color:var(--muted);
+}
+.record .origin b{
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  color:var(--gray);font-weight:400;margin-right:9px;
+}
 @media(max-width:420px){
   .record dl{grid-template-columns:1fr;gap:2px 0}
   .record dd{margin-bottom:9px}
@@ -263,11 +271,29 @@ const SECTIONS = [
         icon: "img/atoqueue-icon.jpg",
         sub: ["img/atoqueue.jpg", "img/atoqueue-notify.jpg"],
         url: "https://atoqueue.sikumilab.com/",
+        origin: "あとで対応することをqueue（待ち行列）に入れる、という意味。cue（合図）も掛けている。",
         record: {
-          q: "作業中に浮かんだ用事を、集中を切らさずに逃がす方法はないか気になった。",
-          m: "入力時に分類を求めない受信箱、あとから整理する画面、放置の度合いに応じて声を掛ける「今日の確認」を持つPWAにした。本文は端末内のlocalStorageだけに置き、サーバーへは匿名の通知予約しか送らない。通知に出せるのは「確認したい項目があります」だけで、中身は端末の外に出ない。",
+          q: "作業中に浮かんだ用事を、集中を切らさずに逃がす方法はないか気になった。「すごく良いアイデアだった気がするけど思い出せない」という経験は誰にでもあるはずで、そこを取りこぼしたくなかった。",
+          m: "あとキューに「あとで思い出したいこと」を入力する。書いた時点で受信箱に入り、分類は後から決める。受信箱の中身をタスクやメモに振り分け、タスクには期限を設定する。タスクの期限通知、期限を過ぎたタスク、未整理のメモについてもリマインドを行い、見直せるようにした。頻度は設定画面から変えられる。本文は端末内のlocalStorageだけに置き、サーバーへは匿名の通知予約しか送らない。通知に本文は出さない設計にしている。",
           w: "通知がなかなか飛ばなかった。PWAだけでは閉じている間の定期実行を保証できないのでWeb Push用の最小のバックエンドを併設したが、そこから先が長かった。バックエンド側の配送処理、端末側の通知設定、ブラウザの権限と、要因が複合していて、一つずつ潰していくしかない。しかも一定時間後に飛ぶ仕組みなので、待っては飛ばず、直しては待つの繰り返しだった。",
           a: "設計を終えて開発中。ひととおり触れる状態になったので公開した。いまも手を入れている最中。"
+        }
+      },
+      {
+        name: "ココロパレア",
+        state: "稼働中", live: true,
+        tech: "JavaScript / GitHub Pages / IPIP日本語50項目版",
+        lede: "ビッグファイブの性格特性を、20問から測れる自己理解ツールです。",
+        image: "img/kokoro.jpg",
+        icon: "img/kokoro-icon.jpg",
+        sub: ["img/kokoro-intro.jpg", "img/kokoro-2.jpg"],
+        url: "https://kokoro.sikumilab.com/",
+        origin: "ココロ（自分の心）、パレット（色を選ぶ）、アロマ（香り）を掛けた名前。",
+        record: {
+          q: "スピリチュアルでない診断アプリを作りたくて着手した。",
+          m: "IPIP日本語50項目版を使い、20問の簡易プレビューから、希望すれば50問の詳細まで進める二段構えにした。判定はきちんとしつつ、心理学の専門家に評価してもらえる人脈もないため、エンタメ要素を多めに入れた。猫の「もなか」をイメージキャラクターに据え、画像の用意、判定文の添削、アロマ要素とパレットの確認で、なかなかの作業量になった。",
+          w: "断定的な性格タイプに見せると誤解を生むため、あくまで自己理解の材料であることを画面上で明示する必要があった。",
+          a: "「もなか」が可愛く表現できた。初めてブランドイメージを真面目に検討した回で、シクミラボという名前もここから生まれた。"
         }
       },
       {
@@ -331,27 +357,13 @@ const SECTIONS = [
         }
       },
       {
-        name: "ココロパレア",
-        state: "稼働中", live: true,
-        tech: "JavaScript / GitHub Pages / IPIP日本語50項目版",
-        lede: "ビッグファイブの性格特性を、20問から測れる自己理解ツールです。",
-        image: "img/kokoro.jpg",
-        sub: ["img/kokoro-intro.jpg", "img/kokoro-2.jpg"],
-        url: "https://kokoro.sikumilab.com/",
-        record: {
-          q: "スピリチュアルでない診断アプリを作りたくて着手した。",
-          m: "IPIP日本語50項目版を使い、20問の簡易プレビューから、希望すれば50問の詳細まで進める二段構えにした。判定はきちんとしつつ、心理学の専門家に評価してもらえる人脈もないため、エンタメ要素を多めに入れた。猫の「もなか」をイメージキャラクターに据え、画像の用意、判定文の添削、アロマ要素とパレットの確認で、なかなかの作業量になった。",
-          w: "断定的な性格タイプに見せると誤解を生むため、あくまで自己理解の材料であることを画面上で明示する必要があった。",
-          a: "「もなか」が可愛く表現できた。初めてブランドイメージを真面目に検討した回で、シクミラボという名前もここから生まれた。"
-        }
-      },
-      {
         name: "GALAXY SHOT",
         state: "公開中", live: true,
         tech: "HTML5 Canvas / Web Audio API",
         lede: "1ファイルに詰め込んだシューティング。パワーアップもBGMもあります。",
         image: "img/galaxy-shot.jpg",
         url: "https://galaxy.sikumilab.com/",
+        origin: "1970年代末のアーケードシューティングをモチーフにした名前。",
         record: {
           q: "HTML5 CanvasとWeb Audio APIだけで、シューティングがどこまで作れるか試した。",
           m: "1ファイルの中に、パワーアップ、ボーナスステージ、BGM、モバイル向けパッド、LocalStorageのランキングまで詰め込んだ。",
@@ -644,7 +656,7 @@ function cardHTML(item, id){
         <dt>ぶつかったこと</dt><dd>${esc(r.w)}</dd>
         <dt>どうしたか</dt><dd>${esc(r.a)}</dd>
       </dl>
-      ${item.icon ? `<img class="icon-sm" src="${esc(item.icon)}" alt="${esc(item.name)}のアイコン" loading="lazy">` : ''}
+      ${item.origin ? `<p class="origin"><b>名前の由来</b>${esc(item.origin)}</p>` : ''}
       ${(item.sub ? [].concat(item.sub) : []).map(src =>
         `<img class="sub" src="${esc(src)}" alt="${esc(item.name)}の画面" loading="lazy">`).join('')}
     </div>
