@@ -475,7 +475,7 @@ const SECTIONS = [
         record: {
           q: "手元のGPUで、実用になるLLMがどこまで動くか気になった。",
           m: "デュアルGPU構成のWindows機にOllamaとOpen WebUIを立て、Cloudflare Tunnel で外部からも使えるようにした。既存のものを組み合わせただけで、自作したものではない。",
-          w: "VRAMの制約でモデル選定に苦労した。画像生成と同時に動かすと取り合いになる。",
+          w: "VRAMの制約でモデル選定に苦労した。",
           a: "検証の土台として、今も動かし続けている。"
         }
       },
@@ -483,16 +483,16 @@ const SECTIONS = [
         name: "Excel/CSV→JSON 変換ツール",
         state: "使用中", live: true,
         tech: "Python / デスクトップアプリ",
-        lede: "ExcelやCSVの設問表を、検定が読み込むJSONに変換する手元の道具です。",
+        lede: "ExcelやCSVの設問表を、アプリが読み込むJSONに変換する手元の道具です。",
         image: "img/csv2json.jpg",
         wide: true,
         sub: "img/csv2json.jpg",
         url: null,
         record: {
-          q: "設問データの整形を、クラウドに預けずに手元で完結させたかった。",
+          q: "AIリテラシー検定やリズムゲームの設問プールを作るのに、毎回同じ整形をしていた。手数が多くて二回以上繰り返しそうな作業は、基本的に仕組みにしてしまう。",
           m: "ローカルで動くデスクトップアプリとして作った。難易度の指定、カテゴリ別の件数集計、ヘッダー行の判定結果を画面に出して、保存前に確認できるようにした。",
           w: "元のExcelの体裁がまちまちで、ヘッダー行の位置を機械的に決められなかった。判定結果をログに出して、人が確認する形に落ち着かせた。",
-          a: "検定の設問を作るたびに使っている。"
+          a: "設問プールを作るたびに使っている。"
         }
       },
       {
@@ -840,21 +840,31 @@ const BLOCK = ["AI-OCR"];
 
   document.addEventListener('click', e => {
     const btn = e.target.closest('.term');
-    if(btn){ (current === btn) ? hide() : show(btn); return; }
+    if(btn){
+      (current === btn) ? hide() : show(btn);
+      return;
+    }
     if(!e.target.closest('#tip')) hide();
   });
   tip.querySelector('.x').addEventListener('click', hide);
   document.addEventListener('keydown', e => { if(e.key === 'Escape') hide(); });
-
-  if(window.matchMedia && window.matchMedia('(hover:hover)').matches){
-    document.addEventListener('mouseover', e => {
-      const btn = e.target.closest('.term');
-      if(btn && btn !== current) show(btn);
-    });
-  }
 })();
 
 
+
+/* -------------------------------------------------------------
+   カードの外をクリック・タップしたら、開いている記録を閉じる
+   ------------------------------------------------------------- */
+document.addEventListener('click', e => {
+  const lb = document.getElementById('lb');
+  if(lb && lb.classList.contains('show')) return;   // 拡大表示中は何もしない
+  if(e.target.closest('.card') || e.target.closest('#tip')) return;
+  main.querySelectorAll('.record.open').forEach(r => r.classList.remove('open'));
+  main.querySelectorAll('button.more[aria-expanded="true"]').forEach(b => {
+    b.setAttribute('aria-expanded','false');
+    b.textContent = '記録を読む';
+  });
+});
 
 /* -------------------------------------------------------------
    画像の拡大表示
