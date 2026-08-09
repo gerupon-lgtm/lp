@@ -857,9 +857,16 @@ const BLOCK = ["AI-OCR"];
    ------------------------------------------------------------- */
 document.addEventListener('click', e => {
   const lb = document.getElementById('lb');
-  if(lb && lb.classList.contains('show')) return;   // 拡大表示中は何もしない
-  if(e.target.closest('.card') || e.target.closest('#tip')) return;
-  main.querySelectorAll('.record.open').forEach(r => r.classList.remove('open'));
+  if(lb && lb.classList.contains('show')) return;      // 拡大表示中は何もしない
+  if(e.target.closest('button.more')) return;          // 開閉ボタンはアコーディオン側に任せる
+  if(e.target.closest('#tip')) return;                 // 用語パネル内は対象外
+
+  const openRec = main.querySelector('.record.open');
+  if(!openRec) return;
+  const ownCard = openRec.closest('.card');
+  if(ownCard && ownCard.contains(e.target)) return;    // 同じカードの中なら開いたまま
+
+  openRec.classList.remove('open');
   main.querySelectorAll('button.more[aria-expanded="true"]').forEach(b => {
     b.setAttribute('aria-expanded','false');
     b.textContent = '記録を読む';
