@@ -12,3 +12,4 @@
 - https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
 - https://alphacephei.com/vosk/
 - https://docs.ultralytics.com/ja/tasks/detect
+- 制作経緯の補足：Voskは当初から採用方針であり、検証に失敗した場合は開発中止予定だった。言語モデルの配置階層による日本語認識の問題は試行錯誤で解決。Web Speech APIの失敗を受けてVoskへ転換したという因果関係にしない。
