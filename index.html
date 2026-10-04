@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>シクミラボ SIKUMI LAB — 動くところまで、やってみる。</title>
 <meta name="description" content="気になったことを手を動かして確かめる、個人の研究室。つくったもの、止まったもの、これからのものの記録。">
-<link rel="icon" href="favicon.svg?v=20261004-6" type="image/svg+xml">
+<link rel="icon" href="favicon.svg?v=20261004-7" type="image/svg+xml">
 <style>
 :root{
   --navy:#1C3557;
@@ -319,14 +319,14 @@ const SECTIONS = [
         "image": "img/site-base-top.svg",
         "sub": [
           "img/site-base-desktop.svg",
-          "img/site-base-management.svg"
+          "img/site-base-management-reorder.svg"
         ],
         "url": "https://site-base.sikumilab.com/",
         "record": {
           "q": "小さなお店や教室の写真・価格・お知らせを、使う人が自分で更新できるようにしたい。サイトを作るだけでなく、その後の管理を引き継げる仕組みを考えた。",
           "m": "公開サイトと設定画面をセットにした。商品・レッスン・サービスの内容や写真を編集し、お知らせの公開期間とNEW表示も設定できる。現在は、ブラウザ内で編集や架空の問い合わせ管理を試せるサンプルを公開している。",
           "w": "見た目だけでなく、更新する人の操作や公開後の管理まで考える必要がある。サンプルで操作できることと、本番で安全に保存・公開できることも分けて確認している。",
-          "a": "まず表示と操作を試せる形を作った。編集内容は使ったブラウザにだけ保存され、本番の認証・共有保存・メール通知はこれから接続する。\n\n親しい友人への無償提供を想定し、初回の制作・公開後は日常の更新やアカウント管理を引き継ぐ。外部サービスやドメインの費用は利用する人が負担する。相談から加えた機能は、ほかの提供先でも使える共通の仕組みとして育てたい。"
+          "a": "まず表示と操作を試せる形を作った。アイテムの並べ替えには、!=テンパリストのリスト項目を並べ替える処理を再利用した。ドラッグ＆ドロップや、長押しして移動し、離して位置を決める操作を、サイトの掲載内容の管理にも使っている。編集内容は使ったブラウザにだけ保存され、本番の認証・共有保存・メール通知はこれから接続する。\n\n親しい友人への無償提供を想定し、初回の制作・公開後は日常の更新やアカウント管理を引き継ぐ。外部サービスやドメインの費用は利用する人が負担する。相談から加えた機能は、ほかの提供先でも使える共通の仕組みとして育てたい。"
         }
       },
       {
@@ -941,7 +941,7 @@ const PLACEHOLDER = `
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-const ASSET_VERSION = "20261004-6";
+const ASSET_VERSION = "20261004-7";
 const assetURL = src => src + (src.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION;
 
 function cardHTML(item, id){
