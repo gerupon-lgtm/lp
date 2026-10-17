@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>シクミラボ SIKUMI LAB — 動くところまで、やってみる。</title>
 <meta name="description" content="気になったことを手を動かして確かめる、個人の研究室。つくったもの、止まったもの、これからのものの記録。">
-<link rel="icon" href="favicon.svg?v=20261017-1" type="image/svg+xml">
+<link rel="icon" href="favicon.svg?v=20261017-2" type="image/svg+xml">
 <style>
 :root{
   --navy:#1C3557;
@@ -156,6 +156,13 @@ button.more:focus-visible,a.visit:focus-visible{outline:2px solid var(--navy-lif
   color:var(--navy);font-weight:600;margin-bottom:6px;
 }
 
+.maker .reading{
+  margin-top:24px;padding-top:18px;border-top:1px solid var(--line-soft);
+}
+.maker .reading-title{font-weight:600;color:var(--navy)}
+.maker .reading a{color:var(--navy);text-underline-offset:3px}
+.maker .reading a:focus-visible{outline:2px solid var(--navy-lift);outline-offset:3px}
+
 /* ---- about / footer ---- */
 .about{padding:64px 0 0;border-top:1px solid var(--line);margin-top:64px}
 .about h2{font-size:17px;font-weight:600;letter-spacing:.04em;color:var(--navy);margin-bottom:16px}
@@ -270,6 +277,11 @@ body.lb-open{overflow:hidden}
   <div class="sign">
     <b>gerupon</b>
     <p>シクミラボでいろいろな仕組みをつくっている人。<br>猫のもなかと暮らしています。<br>ギターと戦闘機、ビールと魚介類が好き。<br>1970年代生まれ。</p>
+  </div>
+  <div class="reading">
+    <p class="reading-title">シクミラボのジブンガタリ</p>
+    <p>音楽や仕事、ものづくりの経験から、「気になる」「分かる」「試す」について書いています。</p>
+    <p><a href="https://kataru.sikumilab.com/" target="_blank" rel="noopener">考えていることを読む ↗</a></p>
   </div>
   </div>
 </div>
@@ -1012,7 +1024,7 @@ const PLACEHOLDER = `
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-const ASSET_VERSION = "20261017-1";
+const ASSET_VERSION = "20261017-2";
 const assetURL = src => src + (src.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION;
 
 function cardHTML(item, id){
