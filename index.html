@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>シクミラボ SIKUMI LAB — 動くところまで、やってみる。</title>
 <meta name="description" content="気になったことを手を動かして確かめる、個人の研究室。つくったもの、止まったもの、これからのものの記録。">
-<link rel="icon" href="favicon.svg?v=20261017-3" type="image/svg+xml">
+<link rel="icon" href="favicon.svg?v=20261017-4" type="image/svg+xml">
 <style>
 :root{
   --navy:#1C3557;
@@ -798,6 +798,22 @@ const SECTIONS = [
     note: "動かなかったもの、コストが合わなかったもの。検証としては役に立っています。",
     items: [
       {
+        "name": "ComfyUI を MCP 経由で使う",
+        "state": "中断",
+        "live": false,
+        "tech": "ComfyUI / Ollama / MCP",
+        "lede": "ComfyUIとOllamaを同じPCで接続し、外部からUIへアクセスできる環境を作りました。MCP経由の操作は未完了のまま、中断しています。",
+        "image": "img/comfyui-workflow.png",
+        "wide": true,
+        "url": null,
+        "record": {
+          "q": "画像生成も手元で完結させられないか気になった。",
+          "m": "Ollamaと同じPCにComfyUIを構築し、内部で両者を接続した。外部からUIへアクセスできるところまで整えた。",
+          "w": "UIから触れる状態と、MCPを通じてAIから操作できる状態は別で、後者の接続はまだ終わっていない。",
+          "a": "途中でジブンガタリを書く方へ興味が移り、中断していた。今回、着手していたことを思い出した。こういう続きを忘れないためにも、あとキューにタスクとして残しておきたい。"
+        }
+      },
+      {
         "name": "ハカルーム",
         "state": "停滞中",
         "live": false,
@@ -897,22 +913,8 @@ const SECTIONS = [
           w: "数問の結果から状態を断定すると、診断や健康助言のように受け取られてしまう。IQという言葉は画面に出さず、長期の履歴も使わず、「今日のプレイでは」という程度の言い方に留めることにした。",
           a: "構想をまとめたところ。問題数やジャンルの決め方はこれから。"
         }
-      },
-      {
-        name: "ComfyUI を MCP 経由で使う",
-        state: "着手予定", live: false,
-        tech: "ComfyUI / MCP",
-        lede: "手元のGPUで画像生成を回し、対話から呼び出せるようにする構想です。",
-        image: null,
-        url: null,
-        record: {
-          q: "画像生成も手元で完結させられないか気になった。",
-          mLabel: "考えていること",
-          m: "既存のGPU機にComfyUIを入れ、MCP経由で呼び出す構成を想定している。",
-          w: "Ollamaと同時に動かすとVRAMを取り合うため、そこの整理が要る。",
-          a: "まだ着手していない。"
-        }
       }
+
     ]
   },
   {
@@ -1024,7 +1026,7 @@ const PLACEHOLDER = `
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-const ASSET_VERSION = "20261017-3";
+const ASSET_VERSION = "20261017-4";
 const assetURL = src => src + (src.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION;
 
 function cardHTML(item, id){
