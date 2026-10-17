@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>シクミラボ SIKUMI LAB — 動くところまで、やってみる。</title>
 <meta name="description" content="気になったことを手を動かして確かめる、個人の研究室。つくったもの、止まったもの、これからのものの記録。">
-<link rel="icon" href="favicon.svg?v=20261017-2" type="image/svg+xml">
+<link rel="icon" href="favicon.svg?v=20261017-3" type="image/svg+xml">
 <style>
 :root{
   --navy:#1C3557;
@@ -1024,7 +1024,7 @@ const PLACEHOLDER = `
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-const ASSET_VERSION = "20261017-2";
+const ASSET_VERSION = "20261017-3";
 const assetURL = src => src + (src.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION;
 
 function cardHTML(item, id){
@@ -1134,6 +1134,8 @@ if(makerBox){
    （例: "AI-OCR" を入れておくと、その中の "OCR" は光りません）
    ------------------------------------------------------------- */
 const TERMS = {
+  "シクミラボのジブンガタリ":"音楽や仕事、ものづくりの経験から、「気になる」「分かる」「試す」について書く読み物。作者が作って確かめる理由や考え方を綴っている。",
+  "ジブンガタリ":"「シクミラボのジブンガタリ」の略称。音楽や仕事、ものづくりの経験を通して、知ることや理解すること、自分で試すことを考える読み物。",
   "SCC":"MSXのゲームなどで使われた波形メモリ音源チップ。短い波形データを繰り返して音を作る。",
   "MSX":"1980年代から使われた共通規格のパソコン。複数のメーカーが対応機を発売した。",
   "PSG":"矩形波やノイズなどから音を作る音源の総称。SCCシミュレーターではMSXで使われたPSGの動作も再現している。",
