@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>シクミラボ SIKUMI LAB — 動くところまで、やってみる。</title>
 <meta name="description" content="気になったことを手を動かして確かめる、個人の研究室。つくったもの、止まったもの、これからのものの記録。">
-<link rel="icon" href="favicon.svg?v=20261108-3" type="image/svg+xml">
+<link rel="icon" href="favicon.svg?v=20261112-1" type="image/svg+xml">
 <style>
 :root{
   --navy:#1C3557;
@@ -69,6 +69,7 @@ section{padding:56px 0 8px}
 }
 .shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .shot img.wide{object-fit:contain;object-position:center}
+.card[data-app-name="TWIST VECTOR"] .shot{align-self:flex-start;background:#deedf1}
 .shot .ph{opacity:.3}
 
 .body{flex:1;min-width:0}
@@ -924,23 +925,24 @@ const SECTIONS = [
     note: "手をつけている最中、あるいはこれから始めるものです。",
     items: [
 {
-  "name": "twist（仮称）",
+  "name": "TWIST VECTOR",
   "state": "開発中・操作検証",
   "live": false,
-  "tech": "JavaScript / three.js / Device Orientation Events API / Web Audio API / SCC音源 / PSG / PWA / localStorage",
-  "lede": "スマホを傾けて飛行機を操縦し、空中の光を集めて出口を目指す3Dブラウザゲームです。出力を調整しながら旋回・上昇・下降し、飛ばす手触りを試しています。",
-  "image": "img/twist-cockpit-mobile-0131.svg",
+  "tech": "JavaScript / three.js / Device Orientation Events API / Web Audio API / SCC音源 / FM音源 / PSG / MIDI / PWA / localStorage",
+  "lede": "スマホを傾けて飛行機を操縦し、空中の光を集めて出口を目指す3Dブラウザゲームです。出力を調整しながら飛ぶ手触りと、SCC音源・FM音源のBGMを試しています。",
+  "image": "img/twist-vector-title-0160.svg",
   "sub": [
-    "img/twist-cockpit-desktop-0131.svg",
-    "img/twist-flight-map-0131.svg"
+    "img/twist-vector-cockpit-0160.svg",
+    "img/twist-vector-supersonic-0160.svg"
   ],
   "url": null,
   "record": {
     "q": "コロガリズムで使ったスマホの傾きセンサーを、別の遊びにも広げられないだろうか。大好きな戦闘機をモチーフに、自分で機体を傾けて飛ばすゲームを作ってみたくなった。",
-    "m": "空中に配置された光を集め、最後に出口へ向かうゲームにした。スマホの傾きで操縦し、画面のつまみでエンジン出力を調整する。外から見る視点、追尾、操縦席を切り替えられる。\n\n機体はスホーイSu-27フランカー風で、HUDと呼ばれる飛行情報の表示は架空のもの。飛行前には地図で経路を確認でき、ためたゲージを使うアフターバーナーで一時的に加速する遊びも加えた。",
-    "w": "傾きに反応して動くだけでは、操縦しやすいとは限らない。持ち方や画面の向き、視点が変わっても、どちらへ進んでいるか分かる必要があった。\n\n速度や高度、目標への案内も、増やすほど画面を覆ってしまう。特にスマホでは、景色と案内を見ながら出力も操作できる配置が必要だった。",
-    "a": "飛ぶ前の持ち方を操作の基準にし、途中でも合わせ直せる形にした。機首の向きと実際に進む方向を表示し、視点ごとに速度・高度・目標の情報を整理した。\n\n速さは数字だけでなく、近くを流れる地面や柱、風音でも伝える。音にはSCCシミュレーターの部品を再利用し、BGMやエンジン音、警告音を加えた。\n\nまずは傾けて飛ばし、光を追いかける操作感を確かめている。旋回や失速、案内の見やすさなど、手を入れながら検証を続けている。"
-  }
+    "m": "空中の光を順番に集め、出口へ向かうゲームにした。スマホの傾きで操縦し、画面のつまみでエンジン出力を調整する。外から見る視点、追尾、操縦席を切り替えられる。\n\n機体はスホーイSu-27フランカー風で、HUDと呼ばれる飛行情報の表示は架空のもの。飛行前に地図で順路を確認し、アフターバーナーで一時的に加速する。音速突破の演出がある高速空域や、長い順路をたどるコースも加えた。",
+    "w": "傾きに反応して動くだけでは、操縦しやすいとは限らない。持ち方や画面の向き、視点が変わっても、どちらへ進んでいるか分かる必要があった。\n\n速度や高度、目標への案内も、増やすほど景色を覆ってしまう。特にスマホでは、景色と計器を読みながら出力も操作できる配置が必要だった。",
+    "a": "飛ぶ前の持ち方を操作の基準にし、途中でも合わせ直せる形にした。端末を傾ける・画面内で回す・手首を回す方式を比べ、機首の向きと実際に進む方向を表示する。計器の配置も選べるようにし、文字の大きさや背景の濃さを調整した。\n\n音はSCCシミュレーターの部品を再利用し、BGMの音源をSCC音源とFM音源から選べるようにした。FMはサエズリズムでの検証を参考に、2オペレータ方式を独立して実装。旋律・和音・ベースをFMへ切り替え、打楽器はPSGで鳴らす。\n\n速さは地面や柱の流れ、風音でも伝え、音速突破には衝撃波の演出を加えた。実際の航空機の性能を再現するものではなく、傾けて飛ばす操作感や音、案内の見やすさを確かめながら改修を続けている。"
+  },
+  "wide": true
 },
 {
   "name": "midiChat",
@@ -1116,7 +1118,7 @@ const PLACEHOLDER = `
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-const ASSET_VERSION = "20261108-3";
+const ASSET_VERSION = "20261112-1";
 const assetURL = src => src + (src.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION;
 
 function cardHTML(item, id){
@@ -1228,9 +1230,9 @@ if(makerBox){
    ------------------------------------------------------------- */
 const TERMS = {
   "MIDI":"音の高さ、鳴らすタイミング、長さや強さなど、楽器の演奏情報をやりとりするための決まり。音声そのものではなく、演奏の指示を扱う。",
-  "HUD":"前方の景色に重ねて速度や高度などを表示する仕組み。twistでは架空の飛行情報表示として使う。",
-  "アフターバーナー":"ジェットエンジンの排気へ燃料を加え、推力を増す仕組み。twistではゲージを消費する一時的な加速として取り入れている。",
-  "SCC音源":"MSXのゲームなどで使われた波形メモリ音源。短い波形を繰り返して音を作る。twistではSCCシミュレーターの部品を再利用している。",
+  "HUD":"前方の景色に重ねて速度や高度などを表示する仕組み。TWIST VECTORでは架空の飛行情報表示として使う。",
+  "アフターバーナー":"ジェットエンジンの排気へ燃料を加え、推力を増す仕組み。TWIST VECTORではゲージを消費する一時的な加速として取り入れている。",
+  "SCC音源":"MSXのゲームなどで使われた波形メモリ音源。短い波形を繰り返して音を作る。TWIST VECTORではSCCシミュレーターの部品を再利用している。",
 
   "アルキメデスの原理":"液体などの中にある物体は、押しのけた液体などの重さに等しい浮力を受けるという原理。",
   "浮力":"液体や気体から物体に働く、上向きの力。フロート・ノーツでは、船が押しのける液体の量と重さから考える。",
@@ -1311,7 +1313,7 @@ const TERMS = {
 
   "因子負荷量":"設問と、その設問が測ろうとする尺度との関連の強さを示す値。シゴトソケットでは原論文の値を設問選定の参考にしている。",
   "ORVIS":"仕事での活動への興味を8つの領域で見る92項目の尺度。シゴトソケットでは原版92項目を独自に日本語訳したうえで、因子負荷量と日本での分かりやすさを考慮して45問を選んで使っている。",
-  "Device Orientation Events API":"スマートフォンの向きや傾きをブラウザから取得する仕組み。コロガリズムでは球を動かす操作、twistでは飛行機の操縦に使っている。",
+  "Device Orientation Events API":"スマートフォンの向きや傾きをブラウザから取得する仕組み。コロガリズムでは球を動かす操作、TWIST VECTORでは飛行機の操縦に使っている。",
   "DeviceOrientationEvent":"端末の向きや傾きが変わったときに、その角度を受け取るためのブラウザのイベント。",
   "Depth-First Search (DFS)":"深さ優先探索。進める方向へできるだけ進み、行き止まりになったら戻る探索方法。コロガリズムでは迷路の生成、プリズム・ノーツでは動いている光がこの先で鐘に届く可能性の確認に使っている。",
   "Breadth-First Search (BFS)":"幅優先探索。近い場所から順番に広げて調べる探索方法。コロガリズムでは生成した迷路の各場所へ到達できることを確認するために使っている。",
@@ -1459,7 +1461,8 @@ const TERMS = {
 // 掲載作品を辞書にも登録する。別名も同じ作品として扱う。
 const APP_NAMES = Object.create(null);
 const APP_ALIASES = {
-  "twist": "twist（仮称）",
+  "twist": "TWIST VECTOR",
+  "twist（仮称）": "TWIST VECTOR",
   "QUIZ BASE": "QUIZ BASE by SIKUMI LAB",
   "AIリテラシー検定": "QUIZ BASE by SIKUMI LAB",
   "姓名判断": "姓名診断",
